@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
 import { API_DUMMY } from "../../utils/BaseUrl";
 
 function Hero() {
@@ -9,7 +8,7 @@ function Hero() {
 
     const getAll = () => {
         axios
-            .get(`${API_DUMMY}/api/barang/makanan`)
+            .get(`${API_DUMMY}/api/barang/makananRingan`)
             .then((res) => {
                 setBarang(res.data);
             })
