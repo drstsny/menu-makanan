@@ -8,13 +8,13 @@ function Buy({ stok_barang }) {
     const { id } = useParams();
     const [nama, setNama] = useState("");
     const [alamat, setAlamat] = useState("");
+    const [ nama_barang] = useState("");
     const [jumlah, setJumlah] = useState(1);
     const [makanan, setMakanan] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validasi input
         if (!nama.trim()) {
             Swal.fire({
                 icon: "error",
@@ -42,7 +42,7 @@ function Buy({ stok_barang }) {
             return;
         }
 
-        if (jumlah > stok_barang) {
+        if (jumlah > (makanan?.stok_barang || 0)) {
             Swal.fire({
                 icon: "error",
                 title: "Jumlah pembelian melebihi stok!",
@@ -52,14 +52,18 @@ function Buy({ stok_barang }) {
         }
 
         try {
-            await axios.post(`${API_DUMMY}/api/barang/api/barang/buy/${id}`, {
-                nama,
-                jumlah,
-                alamat,
+            await axios.post(`${API_DUMMY}/api/barang/${id}`, {nama_barang})
+            await axios.post(`${API_DUMMY}/api/barang/api/barang/buy/${id}`, { jumlah});
+            await axios.post(`${API_DUMMY}/api/buyer/buyer`, {
+                nama: nama,
+                nama_barang: nama_barang,
+                jumlah : jumlah,
+                alamat: alamat,
             });
+
             Swal.fire({
                 icon: "success",
-                title: "Pembelian Berhasil",
+                title: "Pesanan berhasil dibuat.",
                 timer: 1500,
             });
             setNama("");
@@ -98,6 +102,7 @@ function Buy({ stok_barang }) {
                 >
                     <h3 style={{ marginBottom: "20px" }}>Form Pembelian</h3>
                     <div style={{ marginBottom: "10px" }}>
+                        <p><span>{makanan.nama_barang}</span></p>
                         <img src={makanan.link_gambar} alt="" style={{ maxWidth: "100%" }} />
                         <label htmlFor="nama" style={{ display: "block", marginBottom: "5px" }}>
                             Nama Pembeli:
@@ -106,9 +111,9 @@ function Buy({ stok_barang }) {
                             type="text"
                             id="nama"
                             name="nama"
+                            placeholder="Masukkan nama Anda"
                             value={nama}
                             onChange={(e) => setNama(e.target.value)}
-                            required
                             style={{
                                 width: "100%",
                                 padding: "8px",
@@ -147,7 +152,7 @@ function Buy({ stok_barang }) {
                             name="alamat"
                             value={alamat}
                             onChange={(e) => setAlamat(e.target.value)}
-                            required
+                            placeholder="Masukkan alamat pengiriman Anda"
                             rows="4"
                             style={{
                                 width: "100%",

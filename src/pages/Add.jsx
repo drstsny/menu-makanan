@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { API_DUMMY } from "../utils/BaseUrl";
 import Swal from "sweetalert2";
+import { uploadImageToS3 } from "../utils/UploadToS3";
 
 function Add() {
     const [nama_barang, setNama] = useState("");
@@ -12,41 +13,61 @@ function Add() {
     const [jenis_barang, setJenis] = useState("");
     const [deskripsi_barang, setDeskripsi] = useState("");
     const [stok_barang, setStok] = useState("");
-    const [link_gambar, setLink] = useState("");
+    const [link_gambar, setLink] = useState(null);
     const [tanggal_kadaluarsa, setTanggal_Kadaluarsa] = useState("");
 
     const addData = async (e) => {
         e.preventDefault();
 
         try {
-            await axios.post(`${API_DUMMY}/api/barang`, {
-                nama_barang,
-                harga_barang,
-                jenis_barang,
-                deskripsi_barang,
-                stok_barang,
-                link_gambar,
-                tanggal_kadaluarsa,
+            let imageUrl = link_gambar;
+
+            if(link_gambar) {
+                imageUrl = await uploadImageToS3(link_gambar);
+            }
+            const response = await axios.post
+            (`${API_DUMMY}/api/barang`, 
+                {
+                nama_barang: nama_barang,
+                harga_barang: harga_barang,
+                jenis_barang: jenis_barang,
+                deskripsi_barang: deskripsi_barang,
+                stok_barang: stok_barang,
+                link_gambar: imageUrl,
+                tanggal_kadaluarsa: tanggal_kadaluarsa,
             });
-            Swal.fire({
-                icon: "success",
-                title: "Berhasil menambahkan Data",
-                timer: 1500,
-            });
-            setNama("");
-            setHarga("");
-            setJenis("");
-            setDeskripsi("");
-            setStok("");
-            setLink("");
-            setTanggal_Kadaluarsa("");
+
+            console.log(response);
+            if(response.data.code === 200) {
+                setShow(false);
+                Swal.fire({
+                    icon: "error",
+                    title: "Data Gagal di Tambahkan",
+                    text: response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                setTimeout(() => {
+                    history.push("/data");
+                }, 1500);
+            }else {
+                
+            }
+
         } catch (error) {
-            console.log(error);
+            if (error.response && error.response.status === 401) {
+                localStorage.clear();
+                history.push("/login")
+            }else{
             Swal.fire({
                 icon: "error",
                 title: "gagal menambahkan barang",
+                showConfirmButton: false,
                 timer: 1500
-            })
+            });
+            console.log(error);
+            
+            }   
         }
     };
 
@@ -167,10 +188,9 @@ function Add() {
                         <Form.Label style={labelStyle}>Link Gambar:</Form.Label>
                         <Form.Control
                             style={inputStyle}
-                            type="url"
-                            placeholder="Masukkan Link Gambar"
-                            value={link_gambar}
-                            onChange={(e) => setLink(e.target.value)}
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setLink(e.target.files[0])}
                             required
                         />
                     </Form.Group>
