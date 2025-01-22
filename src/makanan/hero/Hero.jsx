@@ -6,6 +6,8 @@ import { API_DUMMY } from "../../utils/BaseUrl";
 
 function Hero() {
     const [barang, setBarang] = useState([]);
+    const [search, setSearch] = useState("");
+    const [error, setError] = useState(null);
 
     const getAll = () => {
         axios
@@ -17,6 +19,18 @@ function Hero() {
                 alert("Terjadi kesalahan: " + error);
             });
     };
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.get(`${API_DUMMY}/api/barang/api/barang?nama_barang=${search}`);
+            setBarang(response.data);
+            setError(null);
+        } catch (error) {
+            setError("Gagal mencari barang. Silakan coba lagi.");
+        }
+    };
+
     useEffect(() => {
         getAll();
     }, []);
@@ -27,17 +41,25 @@ function Hero() {
             margin: "0 auto",
             padding: "20px",
         }}>
-            <h1
-                style={{
-                    textAlign: "center",
-                    fontSize: "2rem",
-                    marginBottom: "20px",
-                    fontWeight: "700",
-                }}
+            <form
+            onSubmit={handleSearch} 
+            className="flex items-center justify-center gap-4 p-4 border border-gray-300 rounded-lg shadow-md bg-white"
             >
-                Pilih Menu Di bawah Ini
-            </h1>
-
+                <input 
+                type="text"
+                placeholder="Masukkan Nama Barang"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-2/3 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button 
+                type="submit" 
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+                >
+                    Cari
+                </button>
+            </form>
+            
             <div className="grid grid-cols-3 mb-4 gap-2">
                 <a href="/">
                     <h1 className="h-10 p-1 text-center bg-blue-600 rounded-lg text-white text-lg font-medium hover:text-gray-300 transition-colors duration-300">
@@ -56,6 +78,11 @@ function Hero() {
                 </a>
             </div>
 
+            {error && <p className="text-center text-red-500">{error}</p>}
+            {barang.length === 0 ? (
+                <p className="text-center text-gray-500">Tidak ada barang ditemukan.</p>
+            ) : (
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {barang.map((row) => (
                     <div
@@ -65,7 +92,7 @@ function Hero() {
                         <img
                             src={row.link_gambar}
                             alt={row.nama_barang}
-                            className="w-full h-40 object-cover"
+                            className="w-full h-64 object-cover"
                         />
                         <div className="p-4">
                             <h3 className="font-bold text-lg text-gray-800 truncate">
@@ -90,6 +117,7 @@ function Hero() {
                     </div>
                 ))}
             </div>
+            )}
         </div>
     );
 }

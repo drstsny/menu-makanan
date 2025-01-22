@@ -4,11 +4,10 @@ import { API_DUMMY } from "../utils/BaseUrl";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-function Buy({ stok_barang }) {
+function Buy() {
     const { id } = useParams();
     const [nama, setNama] = useState("");
     const [alamat, setAlamat] = useState("");
-    const [ nama_barang] = useState("");
     const [jumlah, setJumlah] = useState(1);
     const [makanan, setMakanan] = useState(null);
 
@@ -16,65 +15,41 @@ function Buy({ stok_barang }) {
         e.preventDefault();
 
         if (!nama.trim()) {
-            Swal.fire({
-                icon: "error",
-                title: "Nama tidak boleh kosong!",
-                timer: 1500,
-            });
+            Swal.fire({ icon: "error", title: "Nama tidak boleh kosong!", timer: 1500 });
             return;
         }
 
         if (!alamat.trim()) {
-            Swal.fire({
-                icon: "error",
-                title: "Alamat tidak boleh kosong!",
-                timer: 1500,
-            });
+            Swal.fire({ icon: "error", title: "Alamat tidak boleh kosong!", timer: 1500 });
             return;
         }
 
         if (isNaN(jumlah) || jumlah < 1) {
-            Swal.fire({
-                icon: "error",
-                title: "Jumlah harus berupa angka dan minimal 1!",
-                timer: 1500,
-            });
+            Swal.fire({ icon: "error", title: "Jumlah harus minimal 1!", timer: 1500 });
             return;
         }
 
-        if (jumlah > (makanan?.stok_barang || 0)) {
-            Swal.fire({
-                icon: "error",
-                title: "Jumlah pembelian melebihi stok!",
-                timer: 1500,
-            });
+        if (jumlah > makanan.stok_barang) {
+            Swal.fire({ icon: "error", title: "Jumlah melebihi stok!", timer: 1500 });
             return;
         }
 
         try {
-            await axios.post(`${API_DUMMY}/api/barang/${id}`, {nama_barang})
-            await axios.post(`${API_DUMMY}/api/barang/api/barang/buy/${id}`, { jumlah});
+            await axios.post(`${API_DUMMY}/api/barang/api/barang/buy/${id}`, { jumlah });
             await axios.post(`${API_DUMMY}/api/buyer/buyer`, {
                 nama: nama,
-                nama_barang: nama_barang,
-                jumlah : jumlah,
+                nama_barang: makanan.nama_barang,
+                jumlah: jumlah,
                 alamat: alamat,
             });
 
-            Swal.fire({
-                icon: "success",
-                title: "Pesanan berhasil dibuat.",
-                timer: 1500,
-            });
+            Swal.fire({ icon: "success", title: "Pesanan berhasil dibuat!", timer: 1500 });
             setNama("");
             setAlamat("");
             setJumlah(1);
         } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Terjadi kesalahan",
-                text: error.response?.data?.message || error.message,
-            });
+            console.error("Error:", error.response?.data || error.message);
+            Swal.fire({ icon: "error", title: "Terjadi kesalahan", text: error.message });
         }
     };
 
@@ -100,7 +75,7 @@ function Buy({ stok_barang }) {
                         background: "#f9f9f9",
                     }}
                 >
-                    <h3 style={{ marginBottom: "20px" }}>Form Pembelian</h3>
+                    <h3 className="mb-5 font-serif text-center font-bold">Form Pembelian</h3>
                     <div style={{ marginBottom: "10px" }}>
                         <p><span>{makanan.nama_barang}</span></p>
                         <img src={makanan.link_gambar} alt="" style={{ maxWidth: "100%" }} />
@@ -133,7 +108,7 @@ function Buy({ stok_barang }) {
                             value={jumlah}
                             onChange={(e) => setJumlah(Number(e.target.value))}
                             min="1"
-                            max={stok_barang}
+                            max={makanan.stok_barang}
                             required
                             style={{
                                 width: "100%",
