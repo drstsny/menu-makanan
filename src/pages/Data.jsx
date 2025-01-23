@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2"; 
 import { API_DUMMY } from "../utils/BaseUrl";
+import Logo from "../assets/Logo.png"
 
 function Data() {
     const [barang, setBarang] = useState([]);
@@ -57,35 +58,44 @@ function Data() {
     }, []);
 
     return (
-        <div style={{ 
-                    maxWidth: "1200px", 
-                    margin: "0 auto", 
-                    padding: "20px" }}>
-            <h1 style={{
-                        textAlign: "center", 
-                        fontSize: "2rem", 
-                        marginBottom: "20px" }}
-                        >Data Barang</h1>
-            <div className="flex mb-5 gap-2">
-                <a href="/add" style={{ 
-                        textDecoration: "none", 
-                        fontSize: "1.2rem", 
-                        color: "#fff", 
-                        background: "#007bff", 
-                        padding: "10px 20px", 
-                        borderRadius: "10px"}}
-                        >Tambah Barang
-                </a>
-                <a href="/" style={{ 
-                        textDecoration: "none", 
-                        fontSize: "1.2rem", 
-                        color: "#fff", 
-                        background: "#007bff", 
-                        padding: "10px 20px", 
-                        borderRadius: "10px"}}
-                        >Menu Barang
-                </a>
-            </div>
+        <div className="max-w-full m-auto p-5 bg-bl">
+            <nav className="grid grid-cols-2 bg-gray-100 shadow-lg">
+                <div className="flex items-center gap-4 py-4 px-6">
+                    <img 
+                        src={Logo} 
+                        alt="Logo" 
+                        className="w-16 h-16 bg-white p-2 rounded-full border border-gray-300 shadow-sm"
+                    />
+                    <h1 className="font-extrabold text-2xl text-gray-700">
+                        Dashboard Admin
+                    </h1>
+                </div>
+                <div>
+                    <ul className="flex gap-5 py-10 justify-center">
+                    <li>
+                            <a href="/add"
+                            className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-green-600 hover:shadow-xl transition-all duration-300"
+                            >
+                                Tambah Barang
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/"
+                            className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-green-600 hover:shadow-xl transition-all duration-300"
+                            >
+                                Menu Barang
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/riwayatBuyer"
+                            className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-green-600 hover:shadow-xl transition-all duration-300"
+                            >
+                                Riwayat Pembelian
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
             <Table striped bordered hover style={{ borderCollapse: "collapse", width: "100%" }}>
                 <thead style={{ backgroundColor: "#f8f9fa" }}>
                     <tr>

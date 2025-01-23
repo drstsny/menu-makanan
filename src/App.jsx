@@ -10,6 +10,7 @@ import Detail from "./pages/Detail";
 import Minuman from "./minuman/minuman";
 import Buy from "./buy/buy";
 import MakananRingan from "./makanan_ringan/MakananRingan";
+import RiwayatBuyer from "./buy/RiwayatBuyer";
 
 
 export function App ()  {
@@ -26,6 +27,7 @@ export function App ()  {
         <Route path="/minuman" element={<Minuman/>}/>
         <Route path="/buy/:id" element={<Buy/>}/>
         <Route path="/makananRingan" element={<MakananRingan/>}/>
+        <Route path="/riwayatBuyer" element={<RiwayatBuyer/>}/>
       </Routes>
     </Router>
   );

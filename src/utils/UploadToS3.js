@@ -3,7 +3,7 @@ export const uploadImageToS3 = async (file) => {
     formData.append("file", file);
 
     try {
-        const response = await fetch("https://is3.cloudhost.id/binus", {
+        const response = await fetch("https://is3.cloudhost.id/test", {
         method: "POST",
         body: formData,
         });
