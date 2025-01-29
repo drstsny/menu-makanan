@@ -51,7 +51,7 @@ function RiwayatBuyer() {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="/riwayat"
+                                            <a href="/riwayatBuyer"
                                             className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-green-600 hover:shadow-xl transition-all duration-300"
                                             >
                                                 Riwayat Pembelian

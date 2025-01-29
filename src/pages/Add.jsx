@@ -6,8 +6,10 @@ import axios from "axios";
 import { API_DUMMY } from "../utils/BaseUrl";
 import Swal from "sweetalert2";
 import { uploadImageToS3 } from "../utils/UploadToS3";
+import { useNavigate } from "react-router-dom";
 
 function Add() {
+    const navigate = useNavigate(); 
     const [nama_barang, setNama] = useState("");
     const [harga_barang, setHarga] = useState("");
     const [jenis_barang, setJenis] = useState("");
@@ -39,18 +41,23 @@ function Add() {
 
             console.log(response);
             if(response.data.code === 200) {
-                setShow(false);
                 Swal.fire({
-                    icon: "error",
-                    title: "Data Gagal di Tambahkan",
-                    text: response.data.message,
+                    icon: "success",
+                    title: "Data Berhasil di Tambahkan",
                     showConfirmButton: false,
                     timer: 1500,
                 });
                 setTimeout(() => {
-                    history.push("/data");
+                    navigate("/data");
                 }, 1500);
             }else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Data Gagal Di Tambahkan",
+                    text: response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
                 
             }
 
@@ -198,7 +205,7 @@ function Add() {
                         <Form.Label style={labelStyle}>Tanggal Kadaluarsa:</Form.Label>
                         <Form.Control
                             style={inputStyle}
-                            type="text"
+                            type="date"
                             placeholder="Masukkan tanggal kadaluarsa"
                             value={tanggal_kadaluarsa}
                             onChange={(e) => setTanggal_Kadaluarsa(e.target.value)}

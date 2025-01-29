@@ -32,7 +32,7 @@ function Data() {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios
-                    .delete(`${API_DUMMY}/api/barang/api/barang/${id}`)
+                    .delete(`${API_DUMMY}/api/barang/api/barang/${id}` )
                     .then(() => {
                         setBarang(barang.filter(item => item.id !== id));
                         Swal.fire({
@@ -59,7 +59,7 @@ function Data() {
 
     return (
         <div className="max-w-full m-auto p-5 bg-bl">
-            <nav className="grid grid-cols-2 bg-gray-100 shadow-lg">
+            <nav className="grid grid-cols-2 bg-gray-100 shadow-lg sticky top-0">
                 <div className="flex items-center gap-4 py-4 px-6">
                     <img 
                         src={Logo} 

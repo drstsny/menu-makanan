@@ -4,6 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_DUMMY } from "../utils/BaseUrl";
 import Swal from "sweetalert2";
+import { uploadImageToS3 } from "../utils/UploadToS3";
 
 function Edit() {
     const history = useNavigate();
@@ -38,13 +39,19 @@ function Edit() {
         e.preventDefault();
     
         try {
+            let imageUrl = link_gambar;
+
+            if(link_gambar && link_gambar instanceof File) {
+                imageUrl = await uploadImageToS3(link_gambar)
+            }
+
             await axios.put(`${API_DUMMY}/api/barang/${id}`, {
                 nama_barang,
                 harga_barang,
                 jenis_barang,
                 deskripsi_barang,
                 stok_barang,
-                link_gambar,
+                link_gambar: imageUrl,
                 tanggal_kadaluarsa,
             });
             
@@ -60,9 +67,6 @@ function Edit() {
             alert("Terjadi kesalahan saat mengedit data.");
         }
     };
-    function BuyButton () {
-        return
-    }
 
     const containerStyle = {
         maxWidth: "800px",
@@ -171,7 +175,7 @@ function Edit() {
                         <Form.Label style={labelStyle}>Stok Barang</Form.Label>
                         <Form.Control
                             style={inputStyle}
-                            type="text"
+                            type="number"
                             name="stok"
                             id="stok"
                             value={stok_barang}
@@ -183,12 +187,9 @@ function Edit() {
                         <Form.Label style={labelStyle}>Link Gambar</Form.Label>
                         <Form.Control
                             style={inputStyle}
-                            type="url"
-                            name="link_gambar"
-                            id="link_gambar"
-                            value={link_gambar}
-                            onChange={(e) => setLink(e.target.value)}
-                            placeholder="Link Gambar"
+                            type="file"
+                            onChange={(e) => setLink(e.target.files[0])}
+                            required
                         />
                     </Form.Group>
                     <Form.Group style={formGroupStyle}>

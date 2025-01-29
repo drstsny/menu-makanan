@@ -8,7 +8,7 @@ const Navbar = () => {
                     <img
                         src={Logo}
                         alt="Logo"
-                        className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer"
+                        className="w-16 h-16 bg-white p-2 rounded-full border border-gray-300 shadow-sm"
                     />
                     <h1 className="text-white text-xl sm:text-2xl md:text-3xl font-bold">
                         Selamat Datang

@@ -3,13 +3,13 @@ export const uploadImageToS3 = async (file) => {
     formData.append("file", file);
 
     try {
-        const response = await fetch("https://is3.cloudhost.id/test", {
-        method: "POST",
-        body: formData,
+        const response = await fetch("https://s3.lynk2.co/api/s3/test", {
+            method: "POST",
+            body: formData,
         });
 
         if (!response.ok) {
-        throw new Error("Gagal mengupload gambar ke S3");
+            throw new Error("Gagal mengupload gambar ke S3");
         }
 
         const data = await response.json();
@@ -17,7 +17,7 @@ export const uploadImageToS3 = async (file) => {
             console.log("URL gambar berhasil didapat:", data.data.url_file);
             return data.data.url_file;
         } else {
-        throw new Error("URL gambar tidak tersedia dalam respons S3");
+            throw new Error("URL gambar tidak tersedia dalam respons S3");
         }
         } catch (error) {
         console.error("Error upload ke S3:", error);

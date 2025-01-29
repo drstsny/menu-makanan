@@ -11,7 +11,7 @@ import Minuman from "./minuman/minuman";
 import Buy from "./buy/buy";
 import MakananRingan from "./makanan_ringan/MakananRingan";
 import RiwayatBuyer from "./buy/RiwayatBuyer";
-
+import Keranjang from "./buy/Keranjang";
 
 export function App ()  {
   return(
@@ -28,6 +28,8 @@ export function App ()  {
         <Route path="/buy/:id" element={<Buy/>}/>
         <Route path="/makananRingan" element={<MakananRingan/>}/>
         <Route path="/riwayatBuyer" element={<RiwayatBuyer/>}/>
+        <Route path="/keranjang" element={<Keranjang/>}/>
+
       </Routes>
     </Router>
   );

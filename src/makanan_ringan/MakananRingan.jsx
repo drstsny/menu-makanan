@@ -5,7 +5,6 @@ import Hero from "./hero/Hero"
 const MakananRingan = () => {
     return (
         <>
-        <Navbar/>
         <Hero/>
         </>
     );
