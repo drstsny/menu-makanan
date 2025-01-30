@@ -26,7 +26,7 @@ function Keranjang() {
     const handleSearch = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get(`${API_DUMMY}/api/keranjang`);
+            const response = await axios.get(`${API_DUMMY}/api/keranjang/api/keranjang?nama_barang=${search}`);
             setKeranjang(response.data);
             setError(null);
         } catch (error) {
