@@ -12,6 +12,7 @@ import Buy from "./buy/buy";
 import MakananRingan from "./makanan_ringan/MakananRingan";
 import RiwayatBuyer from "./buy/RiwayatBuyer";
 import Keranjang from "./buy/Keranjang";
+import DetailBuyer from "./buy/DetailBuyer";
 
 export function App ()  {
   return(
@@ -29,6 +30,7 @@ export function App ()  {
         <Route path="/makananRingan" element={<MakananRingan/>}/>
         <Route path="/riwayatBuyer" element={<RiwayatBuyer/>}/>
         <Route path="/keranjang" element={<Keranjang/>}/>
+        <Route path="/detailBuyer/:id" element={<DetailBuyer/>}/>
 
       </Routes>
     </Router>

@@ -2,14 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_DUMMY } from "../utils/BaseUrl";
 import { Link } from "react-router-dom";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaBars } from "react-icons/fa";
 import Swal from "sweetalert2";
-import Logo from "../assets/Keranjang.png"
+import Logo from "../assets/Keranjang.png";
 
 function Keranjang() {
     const [keranjang, setKeranjang] = useState([]);
     const [search, setSearch] = useState("");
     const [error, setError] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const getAll = () => {
         axios
@@ -43,16 +44,16 @@ function Keranjang() {
                     icon: "success",
                     title: "Barang Berhasil Di Hapus",
                     timer: 1500
-                })
+                });
             })
-            .catch((error) => {
+            .catch(() => {
                 Swal.fire({
                     icon: "error",
                     title: "Gagal Menghapus Barang",
                     timer: 1500
-                })
+                });
             });
-    }
+    };
 
     useEffect(() => {
         getAll();
@@ -60,32 +61,24 @@ function Keranjang() {
 
     return (
         <div className="max-w-6xl mx-auto p-6 bg-gray-100">
-            <nav className="flex sticky top-0 justify-between py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md">
-                <div className="flex items-center ">
-                    <img   
-                        src={Logo} 
-                        alt="Logo"
-                        className="w-32 "
-                        />
-                    <h1 className="text-center text-3xl font-bold text-white ">
-                        Keranjang Belanja
-                    </h1>
+            <nav className="sticky top-0 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md py-4 px-6 flex flex-col md:flex-row justify-between items-center">
+                <div className="flex items-center gap-4">
+                    <img src={Logo} alt="Logo" className="w-12" />
+                    <h1 className="text-2xl font-bold text-white">Keranjang Belanja</h1>
                 </div>
-                <div className="flex mb-2">
-                    <form onSubmit={handleSearch} className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <input
-                            type="text"
-                            placeholder="Cari barang di keranjang..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className="w-full sm:w-2/3 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
-                        />
-                        <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 flex items-center gap-2">
-                            <FaSearch />
-                                Cari
-                        </button>
-                    </form>
-                </div>
+                <form onSubmit={handleSearch} className="mt-4 md:mt-0 flex items-center gap-2 w-full md:w-auto">
+                    <input
+                        type="text"
+                        placeholder="Cari barang di keranjang..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+                    />
+                    <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 flex items-center gap-2">
+                        <FaSearch />
+                        Cari
+                    </button>
+                </form>
             </nav>
 
             {error && <p className="text-center text-red-500 mt-4">{error}</p>}
@@ -110,7 +103,7 @@ function Keranjang() {
                                     <button
                                         className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300"
                                         onClick={() => deleteBarang(row.id)}>
-                                            hapus
+                                            Hapus
                                     </button>
                                 </div>
                             </div>
