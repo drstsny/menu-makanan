@@ -3,30 +3,38 @@ import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { API_DUMMY } from "../../utils/BaseUrl";
 import Logo from "../../assets/Logo.png";
-import { FaSearch, FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { AppBar, Toolbar, IconButton, Typography, InputBase, Button, Grid, Card, CardContent, CardMedia, Box, Drawer, List, ListItem, ListItemText } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useMediaQuery, useTheme } from "@mui/material"; 
+
 
 function Hero() {
+    const theme = useTheme();
     const [barang, setBarang] = useState([]);
     const [search, setSearch] = useState("");
     const [error, setError] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [kategori, setKategori] = useState("makanan");
+    const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-    const getAll = () => {
-        axios
-            .get(`${API_DUMMY}/api/barang/makanan`)
+    const getAll = (kategori) => {
+        axios.get(`${API_DUMMY}/api/barang/${kategori}`)
             .then((res) => {
                 setBarang(res.data);
+                setError(null);
             })
             .catch((error) => {
-                alert("Terjadi kesalahan: " + error);
+                setError("Terjadi kesalahan: " + error);
             });
     };
 
     const handleSearch = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get(`${API_DUMMY}/api/barang/api/barang?nama_barang=${search}`);
+            const response = await axios.get(`${API_DUMMY}/api/barang?nama_barang=${search}`);
             setBarang(response.data);
             setError(null);
         } catch (error) {
@@ -37,133 +45,93 @@ function Hero() {
     const addToKeranjang = async (barangId) => {
         try {
             await axios.post(`${API_DUMMY}/api/keranjang/${barangId}`);
-            Swal.fire({
-                icon: "success",
-                title: "Berhasil Menambahkan Ke Keranjang",
-                timer: 1500
-            });
+            Swal.fire({ icon: "success", title: "Berhasil Menambahkan Ke Keranjang", timer: 1500 });
         } catch (error) {
             alert("Gagal Menambahkan Ke Keranjang", error);
+            console.error("Error detail:", error);
         }
     };
 
     useEffect(() => {
-        getAll();
-    }, []);
+        getAll(kategori);
+    }, [kategori]);
 
     return (
-        <div className="w-full bg-gray-200">
-            <nav className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md py-4 sticky top-0">
-                <div className="container mx-auto flex items-center justify-between px-6">
-                    <div className="flex items-center space-x-4">
-                        <img src={Logo} alt="Logo" 
-                        className="w-14 h-14 bg-white p-2 rounded-full border border-gray-300 shadow-sm" />
-                        <h1 className="text-white text-2xl md:text-3xl font-bold"
-                            >Warung Makan
-                        </h1>
-                    </div>
-                    <div className="hidden md:flex flex-1 mx-4">
-                        <form onSubmit={handleSearch} 
-                            className="flex items-center w-full max-w-lg bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
-                            <input 
-                                type="text" 
-                                placeholder="Cari makanan favoritmu..." 
-                                value={search} onChange={(e) => setSearch(e.target.value)} 
-                                className="w-full px-4 py-2 text-gray-700 focus:outline-none" />
-                            <button 
-                                type="submit" 
-                                className="bg-blue-600 px-4 py-3 text-white hover:bg-blue-700 transition duration-300">
-                                <FaSearch />
-                            </button>
-                        </form>
-                    </div>
-                    <div className="flex items-center space-x-6">
-                        <Link to="/keranjang" className="text-white text-lg font-medium flex items-center space-x-2 hover:text-gray-300 transition duration-300">
-                            <FaShoppingCart className="text-xl" />
-                            <h1 className="hidden md:block ">
-                                Keranjang
-                            </h1>
-                        </Link>
-                        <Link to="/login" className="text-white text-lg font-medium flex items-center space-x-2 hover:text-gray-300 transition duration-300">
-                            <FaUser className="text-xl" />
-                            <h1 className="hidden md:block">
-                                Admin ?
-                            </h1>
-                        </Link>
-                    </div>
-                    <button className="md:hidden text-white text-2xl" onClick={() => setMenuOpen(!menuOpen)}>
-                        <FaBars />
-                    </button>
-                </div>
-            </nav>
-            {/* Dropdown Menu for Mobile */}
-            {menuOpen && (
-                <div className="md:hidden bg-white shadow-md py-2">
-                    <Link to="/"
-                        className="block py-2 px-4 text-center text-gray-800 hover:bg-blue-500 hover:text-white"
-                        >Makanan
-                    </Link>
-                    <Link to="/minuman" 
-                        className="block py-2 px-4 text-center text-gray-800 hover:bg-blue-500 hover:text-white"
-                        >Minuman
-                    </Link>
-                    <Link to="/makananRingan" 
-                        className="block py-2 px-4 text-center text-gray-800 hover:bg-blue-500 hover:text-white" 
-                        >Makanan Ringan
-                    </Link>
-                </div>
-            )}
-            
-            {/* Kategori Desktop */}
-            <div className="hidden md:grid grid-cols-3 justify-center space-x-1  py-2 text-center ">
-                <Link to="/" 
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                    >Makanan</Link>
-                <Link to="/minuman" 
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                    >Minuman</Link>
-                <Link to="/makananRingan" 
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                    >Makanan Ringan</Link>
-            </div>
-            
+        <Box>
+            <AppBar position="sticky">
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" onClick={() => setMenuOpen(true)}>
+                        <MenuIcon />
+                    </IconButton>
+                    <img src={Logo} alt="Logo" style={{ width: 50, marginRight: 10 }} />
+                    <Typography variant="h6" sx={{ flexGrow: 1 }}>Warung Makan</Typography>
+                    {isDesktop && (
+                        <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', bgcolor: 'white', borderRadius: 1, padding: '2px 5px' }}>
+                            <InputBase placeholder="Cari makanan..." value={search} onChange={(e) => setSearch(e.target.value)} sx={{ paddingLeft: 1, flex: 1 }} />
+                            <IconButton type="submit" color="primary"><FaSearch /></IconButton>
+                        </Box>
+                    )}
+                    <Button color="inherit" component={Link} to="/keranjang"><FaShoppingCart /></Button>
+                    <Button color="inherit" component={Link} to="/login"><FaUser /></Button>
+                </Toolbar>
+            </AppBar>
 
-            {error && <p className="text-center text-red-500">{error}</p>}
+            <Drawer anchor="left" open={menuOpen} onClose={() => setMenuOpen(false)}>
+                <List>
+                    {isMobile && (
+                        <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', bgcolor: 'white', borderRadius: 1, padding: '2px 5px' }}>
+                        <InputBase placeholder="Cari makanan..." value={search} onChange={(e) => setSearch(e.target.value)} sx={{ paddingLeft: 1, flex: 1 }} />
+                        <IconButton type="submit" color="primary"><FaSearch /></IconButton>
+                    </Box>
+                    )}
+                    <ListItem button onClick={() => {setKategori("makanan"); setMenuOpen(false);}}>
+                        <ListItemText primary="Makanan" />
+                    </ListItem>
+                    <ListItem button onClick={() => {setKategori("minuman"); setMenuOpen(false);}}>
+                        <ListItemText primary="Minuman" />
+                    </ListItem>
+                    <ListItem button onClick={() => {setKategori("makananRingan"); setMenuOpen(false);}}>
+                        <ListItemText primary="Makanan Ringan" />
+                    </ListItem>
+                </List>
+            </Drawer>
+
+            {/* <Box display="flex" justifyContent="center" gap={2} py={2}>
+                <Button variant="contained" color={kategori === "makanan" ? "primary" : "secondary"} onClick={() => setKategori("makanan")}>
+                    Makanan
+                </Button>
+                <Button variant="contained" color={kategori === "minuman" ? "primary" : "secondary"} onClick={() => setKategori("minuman")}>
+                    Minuman
+                </Button>
+                <Button variant="contained" color={kategori === "makananRingan" ? "primary" : "secondary"} onClick={() => setKategori("makananRingan")}>
+                    Makanan Ringan
+                </Button>
+            </Box> */}
+
+            {error && <Typography color="error" align="center">{error}</Typography>}
             {barang.length === 0 ? (
-                <p className="text-center text-gray-500">Tidak ada barang ditemukan.</p>
+                <Typography align="center" color="textSecondary">Tidak ada barang ditemukan.</Typography>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+                <Grid container spacing={2} padding={2}>
                     {barang.map((row) => (
-                        <div key={row.id} 
-                            className="border border-gray-200 rounded-lg shadow-md bg-white hover:shadow-lg transition duration-300">
-                            <img src={row.link_gambar} alt={row.nama_barang} 
-                                className="w-full h-64 object-cover" />
-                            <div className="p-4 text-center">
-                                <h3 className="font-bold text-lg text-gray-800">{row.nama_barang}</h3>
-                                <p className="text-gray-600 mt-2">Harga:
-                                    <span className="font-medium">
-                                    Rp{row.harga_barang}</span>
-                                </p>
-                                <p className="text-gray-600 mt-1">Stok: 
-                                    <span className="font-medium">
-                                        {row.stok_barang}</span>
-                                </p>
-                                <div className="mt-4 flex justify-center gap-2">
-                                    <Link to={`/buy/${row.id}`} 
-                                        className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-                                        >Buy
-                                    </Link>
-                                    <button onClick={() => addToKeranjang(row.id)} 
-                                        className="bg-blue-600 text-white py-2 px-5 rounded-lg hover:bg-blue-700">
-                                        <FaShoppingCart />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <Grid item key={row.id} xs={12} sm={6} md={3}>
+                            <Card>
+                                <CardMedia component="img" image={row.link_gambar} alt={row.nama_barang} sx={{ height: 300, objectFit: "cover" }} />
+                                <CardContent>
+                                    <Typography variant="h6">{row.nama_barang}</Typography>
+                                    <Typography variant="body2" color="textSecondary">Harga: Rp{row.harga_barang}</Typography>
+                                    <Typography variant="body2" color="textSecondary">Stok: {row.stok_barang}</Typography>
+                                    <Box mt={2} display="flex" justifyContent="center" gap={1}>
+                                        <Button variant="contained" color="primary" component={Link} to={`/buy/${row.id}`}>Buy</Button>
+                                        <Button variant="contained" color="secondary" onClick={() => addToKeranjang(row.id)}><FaShoppingCart /></Button>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     ))}
-                </div>
+                </Grid>
             )}
-        </div>
+        </Box>
     );
 }
 

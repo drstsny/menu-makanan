@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { API_DUMMY } from "../utils/BaseUrl";
 import Swal from "sweetalert2";
 import Logo from "../assets/Logo.png";
+import { Grid, TextField, Button, Typography, Box, Paper } from "@mui/material";
 
 
 const Register = () => {
@@ -50,67 +51,62 @@ const Register = () => {
         };
 
     return(
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg">
-                <img src={Logo} alt="Logo" className="w-20 mx-32" />
-            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Register</h2>
-            <form onSubmit={handleRegister}>
-                <div className="mb-4">
-                    <label className="block text-gray-600 text-sm font-medium mb-2" htmlFor="name">
-                        Name:
-                    </label>
-                    <input
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-cyan-300 focus:outline-none text-gray-700"
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Enter your name"
-                        required
+        <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: "100vh" }}>
+            <Grid item xs={12} sm={8} md={4}>
+                <Paper elevation={3} sx={{ p: 4, textAlign: "center" }}>
+                    <Box display="flex" justifyContent="center" mb={2}>
+                        <img src={Logo} alt="Logo" style={{ width: "80px" }} />
+                    </Box>
+                    <Typography variant="h5" fontWeight="bold" gutterBottom>
+                        Register
+                    </Typography>
+                    <form onSubmit={handleRegister}>
+                        <TextField
+                            fullWidth
+                            label="name"
+                            variant="outlined"
+                            margin="normal"
+                            value={nama}
+                            onChange={(e) => setNama(e.target.value)}
+                            required
+                            >
+
+                        </TextField>
+                        <TextField
+                            fullWidth
+                            label="Email"
+                            variant="outlined"
+                            margin="normal"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-600 text-sm font-medium mb-2" htmlFor="email">
-                        Email:
-                    </label>
-                    <input
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-cyan-300 focus:outline-none text-gray-700"
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
-                        required
+                        <TextField
+                            fullWidth
+                            label="Password"
+                            type="password"
+                            variant="outlined"
+                            margin="normal"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
-                </div>
-                <div className="mb-6">
-                    <label className="block text-gray-600 text-sm font-medium mb-2" htmlFor="password">
-                        Password:
-                    </label>
-                    <input
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-cyan-300 focus:outline-none text-gray-700"
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter your password"
-                        required
-                        />
-                </div>
-                <div>
-                    <button
-                        className="w-full bg-gray-500 hover:bg-gray-700 rounded-lg font-semibold py-2 px-4 transition duration-300"
-                        type="submit"
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            sx={{ mt: 2 }}
                         >
                             Register
-                    </button>
-                </div>
-            </form>
-            <p className="text-center text-sm text-gray-500 mt-6">
-                Already have an account? <a href="/login" className="text-blue-400 hover:underline">Login</a>
-            </p>
-            </div>
-        </div>
+                        </Button>
+                    </form>
+                    <Typography variant="body2" sx={{ mt: 2 }}>
+                        Sudah punya akun? <a href="/login" style={{ color: "#1976d2", textDecoration: "none" }}>Login</a>
+                    </Typography>
+                </Paper>
+            </Grid>
+        </Grid>
     );
 };
 
