@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { API_DUMMY } from "../utils/BaseUrl";
+import { Card, CardContent, CardMedia, Typography, Button, Container, CircularProgress, Box } from "@mui/material";
 
 function Detail() {
     const { id } = useParams();
@@ -14,107 +15,39 @@ function Detail() {
             .catch((error) => console.error("Error fetching data:", error));
     }, [id]);
 
-    const containerStyle = {
-        maxWidth: "800px",
-        margin: "0 auto",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-    };
-
-    const headerStyle = {
-        textAlign: "center",
-        fontSize: "2rem",
-        marginBottom: "20px",
-        color: "#333",
-    };
-
-    const cardStyle = {
-        display: "flex",
-        alignItems: "center",
-        background: "#f9f9f9",
-        borderRadius: "10px",
-        padding: "20px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    };
-
-    const imageStyle = {
-        width: "200px",
-        height: "200px",
-        objectFit: "cover",
-        borderRadius: "10px",
-        marginRight: "20px",
-    };
-
-    const detailStyle = {
-        flex: "1",
-    };
-
-    const itemStyle = {
-        marginBottom: "10px",
-        fontSize: "1rem",
-        color: "#555",
-    };
-
-    const buttonStyle = {
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "20px",
-        background: "#007bff",
-        borderRadius: "10px",
-        height: "40px",
-    };
-
-    const linkStyle = {
-        textDecoration: "none",
-        color: "#f9f9f9",
-        fontSize: "1.2rem",
-        fontWeight: "bold",
-        padding: "5px"
-    };
-
     return (
-        <div style={containerStyle}>
-            <h1 style={headerStyle}>Detail Barang</h1>
+        <Container maxWidth="md" sx={{ py: 4 }}>
+            <Typography variant="h4" align="center" gutterBottom>
+                Detail Barang
+            </Typography>
             {makanan ? (
-                <div style={cardStyle}>
-                    <img
-                        src={makanan.link_gambar}
+                <Card sx={{ display: 'flex', boxShadow: 3, borderRadius: 2 }}>
+                    <CardMedia
+                        component="img"
+                        image={makanan.link_gambar}
                         alt="Barang"
-                        style={imageStyle}
+                        sx={{ width: 200, height: 200, objectFit: 'cover', borderRadius: 2, m: 2 }}
                     />
-                    <div style={detailStyle}>
-                        <h3>
-                            <span>{makanan.nama_barang}</span>
-                        </h3>
-                        <p style={itemStyle}>
-                            Harga: <span>{makanan.harga_barang}</span>
-                        </p>
-                        <p style={itemStyle}>
-                            Jenis: <span>{makanan.jenis_barang}</span>
-                        </p>
-                        <p style={itemStyle}>
-                            Deskripsi: <span>{makanan.deskripsi_barang}</span>
-                        </p>
-                        <p style={itemStyle}>
-                            Stok: <span>{makanan.stok_barang}</span>
-                        </p>
-                        <p style={itemStyle}>
-                            Tanggal Kadaluarsa:{" "}
-                            <span>{makanan.tanggal_kadaluarsa}</span>
-                        </p>
-                    </div>
-                </div>
+                    <CardContent>
+                        <Typography variant="h6">{makanan.nama_barang}</Typography>
+                        <Typography variant="body1" color="text.secondary">Harga: {makanan.harga_barang}</Typography>
+                        <Typography variant="body1" color="text.secondary">Jenis: {makanan.jenis_barang}</Typography>
+                        <Typography variant="body1" color="text.secondary">Deskripsi: {makanan.deskripsi_barang}</Typography>
+                        <Typography variant="body1" color="text.secondary">Stok: {makanan.stok_barang}</Typography>
+                        <Typography variant="body1" color="text.secondary">Tanggal Kadaluarsa: {makanan.tanggal_kadaluarsa}</Typography>
+                    </CardContent>
+                </Card>
             ) : (
-                <p style={{ textAlign: "center", fontSize: "1.2rem", color: "#666" }}>
-                    Loading...
-                </p>
+                <Box display="flex" justifyContent="center" mt={4}>
+                    <CircularProgress />
+                </Box>
             )}
-            <a href="/data" style={buttonStyle}>
-                <button style={linkStyle}>
+            <Box display="flex" justifyContent="center" mt={4}>
+                <Button component={Link} to="/data" variant="contained" color="primary">
                     Kembali
-                </button>
-            </a>
-        </div>
+                </Button>
+            </Box>
+        </Container>
     );
 }
 

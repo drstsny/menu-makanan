@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_DUMMY } from "../utils/BaseUrl";
 import Swal from "sweetalert2";
 import { uploadImageToS3 } from "../utils/UploadToS3";
+import { Container, TextField, Button, Typography, Card, CardContent, Box } from "@mui/material";
 
 function Edit() {
     const history = useNavigate();
@@ -42,7 +42,7 @@ function Edit() {
             let imageUrl = link_gambar;
 
             if(link_gambar && link_gambar instanceof File) {
-                imageUrl = await uploadImageToS3(link_gambar)
+                imageUrl = await uploadImageToS3(link_gambar);
             }
 
             await axios.put(`${API_DUMMY}/api/barang/${id}`, {
@@ -68,148 +68,30 @@ function Edit() {
         }
     };
 
-    const containerStyle = {
-        maxWidth: "800px",
-        margin: "0 auto",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-    };
-
-    const titleStyle = {
-        textAlign: "center",
-        fontSize: "2rem",
-        marginBottom: "20px",
-        color: "#333",
-    };
-
-    const cardStyle = {
-        background: "#f9f9f9",
-        borderRadius: "10px",
-        padding: "20px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    };
-
-    const formGroupStyle = {
-        marginBottom: "15px",
-    };
-
-    const labelStyle = {
-        fontWeight: "bold",
-        marginBottom: "5px",
-        display: "block",
-    };
-
-    const inputStyle = {
-        width: "100%",
-        padding: "10px",
-        borderRadius: "5px",
-        border: "1px solid #ccc",
-        fontSize: "1rem",
-    };
-
-    const buttonStyle = {
-        width: "100%",
-        padding: "10px",
-        borderRadius: "5px",
-        background: "#007bff",
-        color: "#fff",
-        border: "none",
-        cursor: "pointer",
-        fontSize: "1rem",
-    };
-
     return (
-        <div style={containerStyle}>
-            <h1 style={titleStyle}>Form Edit Data</h1>
-            <div style={cardStyle}>
-                <Form onSubmit={edit}>
-                    <Form.Group style={formGroupStyle}>
-                        <Form.Label style={labelStyle}>Nama Barang</Form.Label>
-                        <Form.Control
-                            style={inputStyle}
-                            name="nama"
-                            id="nama"
-                            value={nama_barang}
-                            onChange={(e) => setNama(e.target.value)}
-                            type="text"
-                            placeholder="Nama Barang"
-                        />
-                    </Form.Group>
-                    <Form.Group style={formGroupStyle}>
-                        <Form.Label style={labelStyle}>Harga Barang</Form.Label>
-                        <Form.Control
-                            style={inputStyle}
-                            type="number"
-                            name="harga"
-                            id="harga"
-                            value={harga_barang}
-                            onChange={(e) => setHarga(e.target.value)}
-                            placeholder="Harga Barang"
-                        />
-                    </Form.Group>
-                    <Form.Group style={formGroupStyle}>
-                        <Form.Label style={labelStyle}>Jenis Barang</Form.Label>
-                        <Form.Control
-                            style={inputStyle}
-                            type="text"
-                            name="jenis"
-                            id="jenis"
-                            value={jenis_barang}
-                            onChange={(e) => setJenis(e.target.value)}
-                            placeholder="Jenis Barang"
-                        />
-                    </Form.Group>
-                    <Form.Group style={formGroupStyle}>
-                        <Form.Label style={labelStyle}>Deskripsi Barang</Form.Label>
-                        <Form.Control
-                            style={inputStyle}
-                            type="text"
-                            name="text"
-                            id="deskripsi"
-                            value={deskripsi_barang}
-                            onChange={(e) => setDeskripsi(e.target.value)}
-                            placeholder="Deskripsi Barang"
-                        />
-                    </Form.Group>
-                    <Form.Group style={formGroupStyle}>
-                        <Form.Label style={labelStyle}>Stok Barang</Form.Label>
-                        <Form.Control
-                            style={inputStyle}
-                            type="number"
-                            name="stok"
-                            id="stok"
-                            value={stok_barang}
-                            onChange={(e) => setStok(e.target.value)}
-                            placeholder="Stok Barang"
-                        />
-                    </Form.Group>
-                    <Form.Group style={formGroupStyle}>
-                        <Form.Label style={labelStyle}>Link Gambar</Form.Label>
-                        <Form.Control
-                            style={inputStyle}
-                            type="file"
-                            onChange={(e) => setLink(e.target.files[0])}
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group style={formGroupStyle}>
-                        <Form.Label style={labelStyle}>Tanggal Kadaluarsa</Form.Label>
-                        <Form.Control
-                            style={inputStyle}
-                            type="date"
-                            name="tanggal_kadaluarsa"
-                            id="tanggal_kadaluarsa"
-                            value={tanggal_kadaluarsa}
-                            onChange={(e) => setTanggal_Kadaluarsa(e.target.value)}
-                            placeholder="Tanggal Kadaluarsa"
-                        />
-                    </Form.Group>
-                    <Button type="submit" style={buttonStyle}>
-                        Submit
-                    </Button>
-                </Form>
-            </div>
-        </div>
+        <Container maxWidth="sm">
+            <Typography variant="h4" align="center" gutterBottom>
+                Form Edit Data
+            </Typography>
+            <Card>
+                <CardContent>
+                    <form onSubmit={edit}>
+                        <TextField fullWidth margin="normal" label="Nama Barang" value={nama_barang} onChange={(e) => setNama(e.target.value)} required />
+                        <TextField fullWidth margin="normal" label="Harga Barang" type="number" value={harga_barang} onChange={(e) => setHarga(e.target.value)} required />
+                        <TextField fullWidth margin="normal" label="Jenis Barang" value={jenis_barang} onChange={(e) => setJenis(e.target.value)} required />
+                        <TextField fullWidth margin="normal" label="Deskripsi Barang" value={deskripsi_barang} onChange={(e) => setDeskripsi(e.target.value)} required />
+                        <TextField fullWidth margin="normal" label="Stok Barang" type="number" value={stok_barang} onChange={(e) => setStok(e.target.value)} required />
+                        <input type="file" onChange={(e) => setLink(e.target.files[0])} required style={{ marginTop: '16px' }} />
+                        <TextField fullWidth margin="normal" label="Tanggal Kadaluarsa" type="date" InputLabelProps={{ shrink: true }} value={tanggal_kadaluarsa} onChange={(e) => setTanggal_Kadaluarsa(e.target.value)} required />
+                        <Box mt={2}>
+                            <Button type="submit" variant="contained" color="primary" fullWidth>
+                                Submit
+                            </Button>
+                        </Box>
+                    </form>
+                </CardContent>
+            </Card>
+        </Container>
     );
 }
 

@@ -8,12 +8,10 @@ import Add from "./pages/Add";
 import Data from "./pages/Data";
 import Edit from "./pages/Edit";
 import Detail from "./pages/Detail";
-import Minuman from "./minuman/Minuman";
-import Buy from "./buy/Buy";
-import MakananRingan from "./makanan_ringan/MakananRingan";
-import RiwayatBuyer from "./buy/RiwayatBuyer";
-import Keranjang from "./buy/Keranjang";
-import DetailBuyer from "./buy/DetailBuyer";
+import Buy from "./buyer/Buy";
+import RiwayatBuyer from "./buyer/RiwayatBuyer";
+import Keranjang from "./buyer/Keranjang";
+import DetailBuyer from "./buyer/DetailBuyer";
 
 export function App() {
   return (

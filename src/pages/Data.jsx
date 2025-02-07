@@ -1,11 +1,11 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
-import Swal from "sweetalert2"; 
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import Swal from "sweetalert2";
 import { API_DUMMY } from "../utils/BaseUrl";
-import Logo from "../assets/Logo.png"
-import { FaBars } from "react-icons/fa";
+import Logo from "../assets/Logo.png";
 
 function Data() {
     const [barang, setBarang] = useState([]);
@@ -24,7 +24,7 @@ function Data() {
 
     const deleteBarang = async (id) => {
         Swal.fire({
-            title: "Apakah Ingin Di Hapus?",
+            title: "Apakah Ingin Dihapus?",
             text: "Data kamu tidak bisa dikembalikan!",
             icon: "warning",
             showCancelButton: true,
@@ -36,7 +36,7 @@ function Data() {
                 axios
                     .delete(`${API_DUMMY}/api/barang/api/barang/${id}`)
                     .then(() => {
-                        setBarang(barang.filter(item => item.id !== id));
+                        setBarang(barang.filter((item) => item.id !== id));
                         Swal.fire({
                             icon: "success",
                             title: "Berhasil menghapus Data",
@@ -44,12 +44,12 @@ function Data() {
                             timer: 1500,
                         });
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         Swal.fire({
                             icon: "error",
                             title: "Gagal menghapus Barang",
                             timer: 1500,
-                        })
+                        });
                     });
             }
         });
@@ -60,79 +60,80 @@ function Data() {
     }, []);
 
     return (
-        <div className="max-w-full m-auto p-5 bg-bl">
-            <nav className="bg-gray-100 shadow-lg sticky top-0 p-4 flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                    <img 
-                        src={Logo} 
-                        alt="Logo" 
-                        className="w-12 h-12 bg-white p-2 rounded-full border border-gray-300 shadow-sm"
-                    />
-                    <h1 className="font-extrabold text-xl text-gray-700">Dashboard Admin</h1>
-
-                </div>                
-                <div className="hidden md:block space-x-2">
-                    <Link to="/add" 
-                        className="bg-green-400 px-5 py-2 rounded-md hover:bg-green-500">
-                            Tambah Brang
-                    </Link>
-                    <Link to="/"
-                        className="bg-green-400 px-5 py-2 rounded-md hover:bg-green-500">
-                            Menu Barang
-                    </Link>
-                    <Link to="/riwayatBuyer"
-                        className="bg-green-400 px-5 py-2 rounded-md hover:bg-green-500">
-                            Riwayat Pembeli
-                    </Link>
-                </div>
-                <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden px-4 py-2  text-black rounded-lg">
-                    <FaBars/>
-                </button>
-            </nav>
-            {menuOpen && (
-                <div className="md:hidden bg-white shadow-md py-2">
-                    <Link to="/add"
-                        className="block py-2 px-4 text-center text-gray-800 hover:bg-blue-500 hover:text-white"
-                        >Tambah Barang
-                    </Link>
-                    <Link to="/"
-                        className="block py-2 px-4 text-center text-gray-800 hover:bg-blue-500 hover:text-white"
-                        >Menu Barang
-                    </Link>
-                    <Link to="/riwayatBuyer"
-                        className="block py-2 px-4 text-center text-gray-800 hover:bg-blue-500 hover:text-white"
-                        >Riwayat Pembelian
-                    </Link>
-                </div>
-            )}
-            <div className="overflow-x-auto mt-5">
-                <Table striped bordered hover className="w-full text-sm md:text-base">
-                    <thead className="bg-gray-100">
-                        <tr>
-                            <th className="p-2 text-center">No</th>
-                            <th className="p-2 text-left">Nama</th>
-                            <th className="p-2 text-left">Harga</th>
-                            <th className="p-2 text-left">Stok</th>
-                            <th className="p-2 text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <div>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => setMenuOpen(true)}>
+                        <MenuIcon />
+                    </IconButton>
+                    <img src={Logo} alt="Logo" style={{ width: 50, marginRight: 10,}} />
+                    <Typography variant="h6">Dashboard Admin</Typography>
+                </Toolbar>
+            </AppBar>
+            
+            <Drawer anchor="left" open={menuOpen} onClose={() => setMenuOpen(false)}>
+                <List>
+                    <ListItem button component={Link} to="/add"  sx={{ '&:hover': { backgroundColor: '#1976D2', color: 'white' } }}>
+                        <ListItemText primary="Tambah Barang" />
+                    </ListItem>
+                    <ListItem button component={Link} to="/"  sx={{ '&:hover': { backgroundColor: '#1976D2', color: 'white' } }}>
+                        <ListItemText primary="Menu Barang" />
+                    </ListItem>
+                    <ListItem button component={Link} to="/riwayatBuyer"  sx={{ '&:hover': { backgroundColor: '#1976D2', color: 'white' } }}>
+                        <ListItemText primary="Riwayat Pembeli" />
+                    </ListItem>
+                    <ListItem button component={Link} to="/data"  sx={{ '&:hover': { backgroundColor: '#1976D2', color: 'white' } }}>
+                        <ListItemText primary="Data Barang"/>
+                    </ListItem>
+                </List>
+            </Drawer>
+            
+            <TableContainer component={Paper} style={{ marginTop: 20 }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">No</TableCell>
+                            <TableCell>Nama</TableCell>
+                            <TableCell>Harga</TableCell>
+                            <TableCell>Stok</TableCell>
+                            <TableCell align="center">Aksi</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                         {barang.map((row, index) => (
-                            <tr key={row.id} className="border-b">
-                                <td className="p-2 text-center">{index + 1}</td>
-                                <td className="p-2">{row.nama_barang}</td>
-                                <td className="p-2">{row.harga_barang}</td>
-                                <td className="p-2">{row.stok_barang}</td>
-                                <td className="p-2 text-center flex flex-wrap justify-center gap-2">
-                                    <Link to={`/edit/${row.id}`} className="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600">Edit</Link>
-                                    <button className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600" onClick={() => deleteBarang(row.id)}>Hapus</button>
-                                    <Link to={`/detail/${row.id}`} className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">Detail</Link>
-                                </td>
-                            </tr>
+                            <TableRow key={row.id}>
+                                <TableCell align="center">{index + 1}</TableCell>
+                                <TableCell>{row.nama_barang}</TableCell>
+                                <TableCell>{row.harga_barang}</TableCell>
+                                <TableCell>{row.stok_barang}</TableCell>
+                                <TableCell align="center">
+                                    <Button 
+                                        variant="contained" 
+                                        color="warning" 
+                                        component={Link} to={`/edit/${row.id}`} 
+                                        style={{ margin: 5 ,padding: 5}}>
+                                            Edit
+                                    </Button>
+                                    <Button 
+                                        variant="contained" 
+                                        color="error" 
+                                        onClick={() => deleteBarang(row.id)} 
+                                        style={{ margin: 5 ,padding: 5}}>
+                                            Hapus
+                                    </Button>
+                                    <Button 
+                                        variant="contained" 
+                                        color="primary" 
+                                        component={Link} to={`/detail/${row.id}`}
+                                        style={{ margin: 5,padding: 5}}>                                       
+                                            Detail
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
+                    </TableBody>
                 </Table>
-            </div>
+            </TableContainer>
         </div>
     );
 }

@@ -34,7 +34,7 @@ function Hero() {
     const handleSearch = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get(`${API_DUMMY}/api/barang?nama_barang=${search}`);
+            const response = await axios.get(`${API_DUMMY}/api/barang/api/barang?nama_barang=${search}`);
             setBarang(response.data);
             setError(null);
         } catch (error) {
