@@ -20,31 +20,29 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.post(`${API_DUMMY}/api/user/login`, {
                 email: email,
                 password: password,
             });
-            Swal.fire({
-                icon: "success",
-                title: "Berhasil Login!",
-                showConfirmButton: false,
-                timer: 1500,
-            });
-
+    
+            const token = response.data.token; 
+            sessionStorage.setItem("token", token); 
+    
+            Swal.fire({ icon: "success", 
+                        title: "Berhasil Login!", 
+                        timer: 1500 });
+    
             setTimeout(() => {
                 navigate("/data");
             }, 1500);
         } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Login Gagal",
-                text: "Periksa kembali email dan password Anda",
-            });
-            console.log(error);
+            Swal.fire({ icon: "error", 
+                        title: "Login Gagal", 
+                        text: "Periksa kembali email dan password Anda" });
         }
     };
+    
 
     return (
         <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: "100vh" }}>

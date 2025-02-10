@@ -1,6 +1,6 @@
 import React from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { Box, CssBaseline } from "@mui/material";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./component/ProtectedRoute";
 import Makanan from "./makanan/Makanan";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -15,26 +15,24 @@ import DetailBuyer from "./buyer/DetailBuyer";
 
 export function App() {
   return (
-    <Box>
-      <CssBaseline />
       <Router>
-        <Routes>
-          <Route path="/" element={<Makanan />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/add" element={<Add />} />
-          <Route path="/data" element={<Data />} />
-          <Route path="/edit/:id" element={<Edit />} />
-          <Route path="/detail/:id" element={<Detail />} />
-          {/* <Route path="/minuman" element={<Minuman />} /> */}
-          <Route path="/buy/:id" element={<Buy />} />
-          {/* <Route path="/makananRingan" element={<MakananRingan />} /> */}
-          <Route path="/riwayatBuyer" element={<RiwayatBuyer />} />
-          <Route path="/keranjang" element={<Keranjang />} />
-          <Route path="/detailBuyer/:id" element={<DetailBuyer />} />
-        </Routes>
+          <Routes>
+              {/* Rute yang bisa diakses tanpa login */}
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Makanan />} />
+
+              {/* Rute yang butuh login (DILINDUNGI) */}
+              <Route path="/data" element={<ProtectedRoute><Data /></ProtectedRoute>} />
+              <Route path="/add" element={<ProtectedRoute><Add /></ProtectedRoute>} />
+              <Route path="/edit/:id" element={<ProtectedRoute><Edit /></ProtectedRoute>} />
+              <Route path="/detail/:id" element={<ProtectedRoute><Detail /></ProtectedRoute>} />
+              <Route path="/buy/:id" element={<ProtectedRoute><Buy /></ProtectedRoute>} />
+              <Route path="/riwayatBuyer" element={<ProtectedRoute><RiwayatBuyer /></ProtectedRoute>} />
+              <Route path="/keranjang" element={<ProtectedRoute><Keranjang /></ProtectedRoute>} />
+              <Route path="/detailBuyer/:id" element={<ProtectedRoute><DetailBuyer /></ProtectedRoute>} />
+          </Routes>
       </Router>
-    </Box>
   );
 }
 

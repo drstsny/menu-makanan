@@ -52,6 +52,13 @@ function Hero() {
         }
     };
 
+    const handleLogout = () => {
+        sessionStorage.removeItem("token");
+        Swal.fire({ icon: "success", title: "Berhasil Logout!", timer: 1500 });
+        window.location.href = "/login";
+    };
+    
+
     useEffect(() => {
         getAll(kategori);
     }, [kategori]);
@@ -93,6 +100,9 @@ function Hero() {
                     <ListItem button onClick={() => {setKategori("makananRingan"); setMenuOpen(false);}}>
                         <ListItemText primary="Makanan Ringan" />
                     </ListItem>
+                    <ListItem button onClick={handleLogout} variant="contained" color="error">
+                        <ListItemText primary="Logout" />
+                    </ListItem>
                 </List>
             </Drawer>
 
@@ -123,7 +133,24 @@ function Hero() {
                                     <Typography variant="body2" color="textSecondary">Stok: {row.stok_barang}</Typography>
                                     <Box mt={2} display="flex" justifyContent="center" gap={1}>
                                         <Button variant="contained" color="primary" component={Link} to={`/buy/${row.id}`}>Buy</Button>
-                                        <Button variant="contained" color="secondary" onClick={() => addToKeranjang(row.id)}><FaShoppingCart /></Button>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={() => {
+                                                const token = sessionStorage.getItem("token"); 
+                                                if (!token) {
+                                                    Swal.fire({
+                                                    icon: "warning",
+                                                    title: "Anda harus login terlebih dahulu!",
+                                                    timer: 1500,
+                                                });
+                                                return; 
+                                            }
+                                                addToKeranjang(row.id); 
+                                            }}
+                                            >
+                                                <FaShoppingCart />
+                                        </Button>
                                     </Box>
                                 </CardContent>
                             </Card>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { API_DUMMY } from "../utils/BaseUrl";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Container, TextField, Button, Typography, Card, CardContent, CardMedia, CircularProgress, Box } from "@mui/material";
 
 function Buy() {
@@ -11,6 +11,7 @@ function Buy() {
     const [alamat, setAlamat] = useState("");
     const [jumlah, setJumlah] = useState(1);
     const [makanan, setMakanan] = useState(null);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -55,10 +56,29 @@ function Buy() {
     };
 
     useEffect(() => {
-        axios
-            .get(`${API_DUMMY}/api/barang/${id}`)
-            .then((response) => setMakanan(response.data))
-            .catch((error) => console.log("Gagal memuat data:", error));
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${API_DUMMY}/api/barang/${id}`);
+                setMakanan(response.data);
+            } catch (error) {
+                console.error("Gagal memuat data:", error);
+                Swal.fire({ icon: "error", title: "Gagal memuat data barang", text: error.message });
+            }
+        };
+    
+        fetchData();
+        const token = sessionStorage.getItem("token");
+        
+        if (!token) {
+            Swal.fire({
+                icon: "warning",
+                title: "Anda harus login terlebih dahulu!",
+                timer: 1500,
+            }).then(() => {
+                navigate("/login");
+            });
+        }
+        
     }, [id]);
 
     return (
@@ -82,7 +102,11 @@ function Buy() {
                                 label="Jumlah Barang" 
                                 type="number" 
                                 value={jumlah} 
-                                onChange={(e) => setJumlah(Number(e.target.value))} 
+                                onChange={(e) => {
+                                    const value = Number(e.target.value);
+                                    setJumlah(value > 0 ? value : 1);
+                                }}
+                                
                                 inputProps={{ min: 1, max: makanan.stok_barang }} margin="normal" 
                                 required />
                             <TextField 

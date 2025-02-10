@@ -59,6 +59,17 @@ function Keranjang() {
 
     useEffect(() => {
         getAll();
+        const token = sessionStorage.getItem("token");
+        
+                if (!token) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Anda harus login terlebih dahulu!",
+                        timer: 1500,
+                    });
+        
+                    navigate("/login");
+                }
     }, []);
 
     return (

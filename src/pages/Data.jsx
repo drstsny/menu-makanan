@@ -55,8 +55,25 @@ function Data() {
         });
     };
 
+    const handleLogout = () => {
+            sessionStorage.removeItem("token"); 
+            Swal.fire({ icon: "success", title: "Berhasil Logout!", timer: 1500 });
+            window.location.href = "/login"; 
+        };
+
     useEffect(() => {
         getAll();
+        const token = sessionStorage.getItem("token");
+
+        if (!token) {
+            Swal.fire({
+                icon: "warning",
+                title: "Anda harus login terlebih dahulu!",
+                timer: 1500,
+            });
+
+            navigate("/login");
+        }
     }, []);
 
     return (
@@ -84,6 +101,9 @@ function Data() {
                     </ListItem>
                     <ListItem button component={Link} to="/data"  sx={{ '&:hover': { backgroundColor: '#1976D2', color: 'white' } }}>
                         <ListItemText primary="Data Barang"/>
+                    </ListItem>
+                    <ListItem button onClick={handleLogout} sx={{ '&:hover': { backgroundColor: '#1976D2', color: 'white' } }}>
+                        <ListItemText primary="Logout" />
                     </ListItem>
                 </List>
             </Drawer>
